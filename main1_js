@@ -1,0 +1,440 @@
+// ===== ДАННЫЕ =====
+let employees = [
+    { id: 1, name: 'Иванов А.П.', position: 'Водитель', status: 'free', phone: '+7 914 341-91-71' },
+    { id: 2, name: 'Петров С.И.', position: 'Грузчик', status: 'busy', phone: '+7 914 341-91-72' },
+    { id: 3, name: 'Сидоров М.В.', position: 'Диспетчер', status: 'free', phone: '+7 914 341-91-73' },
+    { id: 4, name: 'Козлов Д.А.', position: 'Водитель', status: 'vacation', phone: '+7 914 341-91-74' }
+];
+
+let tasks = [
+    { id: 1, text: 'Доставка в Мурманск', status: 'urgent', employee: 'Иванов А.П.' },
+    { id: 2, text: 'Погрузка на складе №3', status: 'progress', employee: 'Петров С.И.' },
+    { id: 3, text: 'Оформление документов', status: 'done', employee: 'Сидоров М.В.' }
+];
+
+let clients = [
+    { id: 1, name: 'ООО "СтройМастер"', desc: 'Крупный поставщик стройматериалов. Работаем с 2020 года.', rating: 5 },
+    { id: 2, name: 'ИП Смирнов', desc: 'Частный предприниматель, регулярные перевозки.', rating: 4 },
+    { id: 3, name: 'АО "МегаСтрой"', desc: 'Федеральная сеть строительных магазинов.', rating: 5 }
+];
+
+let reviews = [
+    { author: 'ООО "СтройМастер"', text: 'Отличная компания! Доставляют всегда в срок, материалы в целости.', date: '15.11.2026' },
+    { author: 'ИП Смирнов', text: 'Работаем уже 3 года. Рекомендую!', date: '10.11.2026' },
+    { author: 'АО "МегаСтрой"', text: 'Профессиональный подход, адекватные цены.', date: '05.11.2026' }
+];
+
+// Расстояния между городами (км)
+const distances = {
+    'Москва-Мурманск': 2100,
+    'Москва-Санкт-Петербург': 710,
+    'Москва-Нижний Новгород': 420,
+    'Москва-Екатеринбург': 1800,
+    'Москва-Новосибирск': 3300,
+    'Москва-Владивосток': 9200,
+    'Санкт-Петербург-Мурманск': 1400,
+    'Санкт-Петербург-Екатеринбург': 2200,
+    'Екатеринбург-Новосибирск': 1500,
+    'Новосибирск-Владивосток': 5800
+};
+
+const cityCoords = {
+    'Москва': { x: 150, y: 220 },
+    'Санкт-Петербург': { x: 180, y: 180 },
+    'Мурманск': { x: 130, y: 190 },
+    'Нижний Новгород': { x: 220, y: 200 },
+    'Екатеринбург': { x: 350, y: 200 },
+    'Новосибирск': { x: 500, y: 190 },
+    'Владивосток': { x: 650, y: 200 }
+};
+
+// ===== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК =====
+function switchTab(tabName) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+    document.getElementById(`tab-${tabName}`).classList.add('active');
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+}
+
+// ===== РЕНДЕР СОТРУДНИКОВ =====
+function renderEmployees() {
+    const list = document.getElementById('employeeList');
+    list.innerHTML = employees.map(emp => `
+        <div class="employee-card">
+            <h4>${emp.name}</h4>
+            <p>📋 ${emp.position}</p>
+            <p>📞 ${emp.phone}</p>
+            <span class="employee-status status-${emp.status}">
+                ${emp.status === 'free' ? '✅ Свободен' : emp.status === 'busy' ? '🔧 Занят' : '🏖️ Отпуск'}
+            </span>
+        </div>
+    `).join('');
+}
+
+// ===== РЕНДЕР ЗАДАЧ =====
+function renderTasks() {
+    const urgent = document.getElementById('tasksUrgent');
+    const progress = document.getElementById('tasksProgress');
+    const done = document.getElementById('tasksDone');
+
+    urgent.innerHTML = tasks.filter(t => t.status === 'urgent').map(t => `
+        <div class="task-item">${t.text}<br><small>${t.employee}</small></div>
+    `).join('');
+
+    progress.innerHTML = tasks.filter(t => t.status === 'progress').map(t => `
+        <div class="task-item">${t.text}<br><small>${t.employee}</small></div>
+    `).join('');
+
+    done.innerHTML = tasks.filter(t => t.status === 'done').map(t => `
+        <div class="task-item">${t.text}<br><small>${t.employee}</small></div>
+    `).join('');
+}
+
+// ===== РЕНДЕР КЛИЕНТОВ =====
+function renderClients() {
+    const grid = document.getElementById('clientsGrid');
+    grid.innerHTML = clients.map(client => `
+        <div class="client-card">
+            <h4>${client.name}</h4>
+            <p class="client-desc">${client.desc}</p>
+            <div class="client-rating">${'⭐'.repeat(client.rating)}</div>
+        </div>
+    `).join('');
+}
+
+// ===== РЕНДЕР ОТЗЫВОВ =====
+function renderReviews() {
+    const list = document.getElementById('reviewsList');
+    list.innerHTML = reviews.map(review => `
+        <div class="review-item">
+            <div class="review-author">${review.author}</div>
+            <div class="review-text">${review.text}</div>
+            <div class="review-date">${review.date}</div>
+        </div>
+    `).join('');
+}
+
+// ===== РАСЧЁТ МАРШРУТА =====
+function calculateRoute() {
+    const from = document.getElementById('cityFrom').value;
+    const to = document.getElementById('cityTo').value;
+
+    if (from === to) {
+        alert('Выберите разные города!');
+        return;
+    }
+
+    const key1 = `${from}-${to}`;
+    const key2 = `${to}-${from}`;
+    const distance = distances[key1] || distances[key2] || Math.floor(Math.random() * 3000 + 500);
+
+    const fuelPer100km = 25; // литров на 100 км
+    const fuelPrice = 52; // рублей за литр
+    const speed = 80; // км/ч
+
+    const fuel = (distance / 100 * fuelPer100km).toFixed(1);
+    const cost = Math.round(fuel * fuelPrice);
+    const time = (distance / speed).toFixed(1);
+
+    document.getElementById('routeDistance').textContent = `${distance} км`;
+    document.getElementById('routeFuel').textContent = `${fuel} л`;
+    document.getElementById('routeCost').textContent = `${cost.toLocaleString()} ₽`;
+    document.getElementById('routeTime').textContent = `${time} ч`;
+    document.getElementById('routeResult').style.display = 'block';
+
+    // Рисуем маршрут на карте
+    drawRoute(from, to);
+}
+
+function drawRoute(from, to) {
+    const start = cityCoords[from];
+    const end = cityCoords[to];
+
+    const line = document.getElementById('routeLine');
+    const startCircle = document.getElementById('routeStart');
+    const endCircle = document.getElementById('routeEnd');
+
+    line.setAttribute('x1', start.x);
+    line.setAttribute('y1', start.y);
+    line.setAttribute('x2', end.x);
+    line.setAttribute('y2', end.y);
+    line.style.display = 'block';
+
+    startCircle.setAttribute('cx', start.x);
+    startCircle.setAttribute('cy', start.y);
+    startCircle.style.display = 'block';
+
+    endCircle.setAttribute('cx', end.x);
+    endCircle.setAttribute('cy', end.y);
+    endCircle.style.display = 'block';
+}
+
+function clearRoute() {
+    document.getElementById('routeLine').style.display = 'none';
+    document.getElementById('routeStart').style.display = 'none';
+    document.getElementById('routeEnd').style.display = 'none';
+    document.getElementById('routeResult').style.display = 'none';
+}
+
+function selectCity(city, x, y) {
+    alert(`Выбран город: ${city}`);
+}
+
+// ===== КАЛЬКУЛЯТОР =====
+function toggleCalculator() {
+    document.getElementById('calculatorModal').classList.toggle('active');
+}
+
+function calculatePrice() {
+    const weight = parseFloat(document.getElementById('calcWeight').value) || 500;
+    const tariff = parseFloat(document.getElementById('calcTariff').value) || 1;
+    const basePrice = 15000;
+    const price = Math.round((basePrice + weight * 30) * tariff);
+
+    document.getElementById('calcPrice').textContent = `${price.toLocaleString()} ₽`;
+
+    const date = new Date();
+    const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+                    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+    document.getElementById('calcDate').textContent = `${date.getDate()} ${months[date.getMonth()]}`;
+}
+
+// ===== МОДАЛЬНЫЕ ОКНА =====
+function openModal(type) {
+    const overlay = document.getElementById('modalOverlay');
+    const content = document.getElementById('modalContent');
+
+    let html = '';
+
+    switch(type) {
+        case 'login':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Вход в систему</h3>
+                <label>Email или логин:</label>
+                <input type="text" id="loginEmail">
+                <label>Пароль:</label>
+                <input type="password" id="loginPassword">
+                <button class="btn-submit" onclick="doLogin()">Войти</button>
+            `;
+            break;
+        case 'register':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Регистрация</h3>
+                <label>Имя:</label>
+                <input type="text" id="regName">
+                <label>Email:</label>
+                <input type="email" id="regEmail">
+                <label>Пароль:</label>
+                <input type="password" id="regPassword">
+                <label>Роль:</label>
+                <select id="regRole">
+                    <option>Сотрудник</option>
+                    <option>Клиент</option>
+                    <option>Администратор</option>
+                </select>
+                <button class="btn-submit" onclick="doRegister()">Зарегистрироваться</button>
+            `;
+            break;
+        case 'addEmployee':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Добавить сотрудника</h3>
+                <label>ФИО:</label>
+                <input type="text" id="empName">
+                <label>Должность:</label>
+                <input type="text" id="empPosition">
+                <label>Телефон:</label>
+                <input type="text" id="empPhone">
+                <button class="btn-submit" onclick="addEmployee()">Добавить</button>
+            `;
+            break;
+        case 'assignTask':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Назначить задачу</h3>
+                <label>Описание задачи:</label>
+                <textarea id="taskText"></textarea>
+                <label>Сотрудник:</label>
+                <select id="taskEmployee">
+                    ${employees.map(e => `<option>${e.name}</option>`).join('')}
+                </select>
+                <label>Приоритет:</label>
+                <select id="taskPriority">
+                    <option value="urgent">🔴 Срочно</option>
+                    <option value="progress">🟡 В работе</option>
+                    <option value="done">🟢 Выполнено</option>
+                </select>
+                <button class="btn-submit" onclick="addTask()">Назначить</button>
+            `;
+            break;
+        case 'materials':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Распределить материалы</h3>
+                <label>Материал:</label>
+                <select id="materialType">
+                    <option>Цемент</option>
+                    <option>Кирпич</option>
+                    <option>Доски</option>
+                    <option>Металлоконструкции</option>
+                    <option>Изоляция</option>
+                </select>
+                <label>Количество (кг/шт):</label>
+                <input type="number" id="materialAmount">
+                <label>Назначить сотруднику:</label>
+                <select id="materialEmployee">
+                    ${employees.filter(e => e.status === 'free').map(e => `<option>${e.name}</option>`).join('')}
+                </select>
+                <button class="btn-submit" onclick="assignMaterials()">Распределить</button>
+            `;
+            break;
+        case 'addClient':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>Добавить клиента</h3>
+                <label>Название/Имя:</label>
+                <input type="text" id="clientName">
+                <label>Описание:</label>
+                <textarea id="clientDesc"></textarea>
+                <label>Рейтинг (1-5):</label>
+                <select id="clientRating">
+                    <option value="5">⭐⭐⭐⭐⭐</option>
+                    <option value="4">⭐⭐⭐⭐</option>
+                    <option value="3">⭐⭐⭐</option>
+                    <option value="2">⭐⭐</option>
+                    <option value="1">⭐</option>
+                </select>
+                <button class="btn-submit" onclick="addClient()">Добавить</button>
+            `;
+            break;
+        case 'company':
+            html = `
+                <button class="close-btn" onclick="closeModalDirect()">✕</button>
+                <h3>🏢 О компании "Сборные Грузы"</h3>
+                <p style="color:#b0c4de; line-height:1.6; margin-top:15px;">
+                    Мы — ведущая компания по перевозке сборных грузов и стройматериалов по всей России.
+                    Работаем с 2015 года.
+                </p>
+                <p style="color:#b0c4de; line-height:1.6; margin-top:15px;">
+                    📞 Телефон: +7 914 341-91-71<br>
+                    📧 Email: info@sbornye-gruzy.ru<br>
+                    📍 Адрес: г. Москва, ул. Transportная, 15
+                </p>
+                <p style="color:#00ffcc; margin-top:20px; font-weight:600;">
+                    ✅ Более 1000 довольных клиентов<br>
+                    ✅ Доставка в 50+ городов России<br>
+                    ✅ Собственный автопарк
+                </p>
+            `;
+            break;
+    }
+
+    content.innerHTML = html;
+    overlay.classList.add('active');
+}
+
+function closeModal(event) {
+    if (event.target === document.getElementById('modalOverlay')) {
+        document.getElementById('modalOverlay').classList.remove('active');
+    }
+}
+
+function closeModalDirect() {
+    document.getElementById('modalOverlay').classList.remove('active');
+}
+
+// ===== ДЕЙСТВИЯ =====
+function doLogin() {
+    const email = document.getElementById('loginEmail').value;
+    if (email) {
+        alert(`Добро пожаловать, ${email}!`);
+        closeModalDirect();
+    } else {
+        alert('Введите email!');
+    }
+}
+
+function doRegister() {
+    const name = document.getElementById('regName').value;
+    if (name) {
+        alert(`Регистрация успешна! Добро пожаловать, ${name}!`);
+        closeModalDirect();
+    } else {
+        alert('Заполните все поля!');
+    }
+}
+
+function addEmployee() {
+    const name = document.getElementById('empName').value;
+    const position = document.getElementById('empPosition').value;
+    const phone = document.getElementById('empPhone').value;
+
+    if (name && position) {
+        employees.push({
+            id: employees.length + 1,
+            name,
+            position,
+            status: 'free',
+            phone: phone || 'Не указан'
+        });
+        renderEmployees();
+        closeModalDirect();
+        alert('Сотрудник добавлен!');
+    } else {
+        alert('Заполните обязательные поля!');
+    }
+}
+
+function addTask() {
+    const text = document.getElementById('taskText').value;
+    const employee = document.getElementById('taskEmployee').value;
+    const priority = document.getElementById('taskPriority').value;
+
+    if (text) {
+        tasks.push({ id: tasks.length + 1, text, status: priority, employee });
+        renderTasks();
+        closeModalDirect();
+        alert('Задача назначена!');
+    } else {
+        alert('Введите описание задачи!');
+    }
+}
+
+function assignMaterials() {
+    const material = document.getElementById('materialType').value;
+    const amount = document.getElementById('materialAmount').value;
+    const employee = document.getElementById('materialEmployee').value;
+
+    if (amount) {
+        alert(`Материал "${material}" (${amount} ед.) назначен сотруднику ${employee}`);
+        closeModalDirect();
+    } else {
+        alert('Укажите количество!');
+    }
+}
+
+function addClient() {
+    const name = document.getElementById('clientName').value;
+    const desc = document.getElementById('clientDesc').value;
+    const rating = parseInt(document.getElementById('clientRating').value);
+
+    if (name) {
+        clients.push({ id: clients.length + 1, name, desc, rating });
+        renderClients();
+        closeModalDirect();
+        alert('Клиент добавлен!');
+    } else {
+        alert('Введите название клиента!');
+    }
+}
+
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+document.addEventListener('DOMContentLoaded', () => {
+    renderEmployees();
+    renderTasks();
+    renderClients();
+    renderReviews();
+});
