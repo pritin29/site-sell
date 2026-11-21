@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Сборные грузы</title>
+  <title>Сборные грузы — Грузоперевозки по России</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+  <!-- ===== ШАПКА ===== -->
   <header class="header">
     <div class="logo">СБОРНЫЕ ГРУЗЫ</div>
     <div class="auth-buttons">
@@ -16,318 +17,329 @@
     </div>
   </header>
 
+  <!-- ===== НАВИГАЦИЯ ===== -->
   <nav class="nav">
-    <button class="nav-btn active" data-target="employees">СОТРУДНИКИ</button>
-    <button class="nav-btn" data-target="map">
-      <span class="nav-text">КАРТА</span>
-      <span class="info-circle" id="openInfo" title="О компании">i</span>
+    <button class="nav-btn active" data-section="employees">СОТРУДНИКИ</button>
+    <button class="nav-btn map-btn" data-section="map">
+      КАРТА
+      <span class="info-circle" id="openCompanyInfo" title="О компании">i</span>
     </button>
-    <button class="nav-btn" data-target="clients">КЛИЕНТЫ</button>
+    <button class="nav-btn" data-section="clients">КЛИЕНТЫ</button>
   </nav>
 
-  <!-- РАЗДЕЛ: СОТРУДНИКИ -->
-  <section class="page" id="employees">
-    <div class="page-header">
-      <h2>Сотрудники и доставленные грузы</h2>
-      <p>Команда и история выполненных перевозок</p>
+  <!-- ===== РАЗДЕЛ: СОТРУДНИКИ ===== -->
+  <!-- РЕДАКТИРОВАТЬ: меняйте карточки внутри .employees-grid -->
+  <section class="section active" id="employees">
+    <div class="section-header">
+      <h2>Наши сотрудники</h2>
+      <p class="section-subtitle">Команда профессионалов, которая доставит ваш груз вовремя</p>
     </div>
-    <div class="grid employees-grid">
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#4CAF50;">АИ</div>
+    <div class="employees-grid">
+
+      <!-- Сотрудник 1 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#4CAF50;">АИ</div>
         <h3>Алексей Иванов</h3>
-        <p class="role">Генеральный директор</p>
-        <p class="desc">Опыт в логистике 15 лет. Руководит с 2010 года.</p>
-        <p class="phone">📞 +7 914 341-91-71</p>
-        <div class="deliveries">
-          <h4>📦 Доставленные грузы:</h4>
-          <ul>
-            <li>🧱 Кирпич 20т — Москва → Санкт-Петербург, 12.09.2026</li>
-            <li>🪵 Пиломатериалы 15т — Москва → Казань, 03.10.2026</li>
-            <li>🏗️ Металлоконструкции 30т — Москва → Екатеринбург, 21.10.2026</li>
-          </ul>
-        </div>
+        <p class="employee-role">Генеральный директор</p>
+        <p class="employee-desc">Опыт в логистике более 15 лет. Отвечает за стратегическое развитие компании.</p>
+        <p class="employee-contact">📞 +7 914 341-91-71</p>
       </div>
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#2196F3;">МП</div>
+      <!-- Сотрудник 2 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#2196F3;">МП</div>
         <h3>Мария Петрова</h3>
-        <p class="role">Менеджер по клиентам</p>
-        <p class="desc">Рассчитывает стоимость и подбирает тариф.</p>
-        <p class="phone">📞 +7 914 341-91-72</p>
-        <div class="deliveries">
-          <h4>📦 Доставленные грузы:</h4>
-          <ul>
-            <li>🧪 Утеплитель 8т — Москва → Мурманск, 18.09.2026</li>
-            <li>🪟 Окна ПВХ 5т — Москва → Ростов-на-Дону, 05.10.2026</li>
-            <li>🔩 Крепёж 3т — Москва → Новосибирск, 28.10.2026</li>
-          </ul>
-        </div>
+        <p class="employee-role">Менеджер по работе с клиентами</p>
+        <p class="employee-desc">Поможет рассчитать стоимость и подобрать оптимальный тариф перевозки.</p>
+        <p class="employee-contact">📞 +7 914 341-91-72</p>
       </div>
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#FF9800;">ДС</div>
+      <!-- Сотрудник 3 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#FF9800;">ДС</div>
         <h3>Дмитрий Сидоров</h3>
-        <p class="role">Начальник логистики</p>
-        <p class="desc">Планирует маршруты по всей России.</p>
-        <p class="phone">📞 +7 914 341-91-73</p>
-        <div class="deliveries">
-          <h4>📦 Доставленные грузы:</h4>
-          <ul>
-            <li>🏠 Сэндвич-панели 25т — Москва → Красноярск, 10.09.2026</li>
-            <li>🪨 Щебень 40т — Москва → Казань, 22.09.2026</li>
-            <li>🏗️ Арматура 35т — Москва → Владивосток, 15.10.2026</li>
-          </ul>
-        </div>
+        <p class="employee-role">Начальник отдела логистики</p>
+        <p class="employee-desc">Планирует маршруты и контролирует доставку грузов по всей России.</p>
+        <p class="employee-contact">📞 +7 914 341-91-73</p>
       </div>
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#9C27B0;">ЕК</div>
+      <!-- Сотрудник 4 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#9C27B0;">ЕК</div>
         <h3>Елена Козлова</h3>
-        <p class="role">Водитель-экспедитор</p>
-        <p class="desc">Стаж 12 лет. Маршруты: Москва — Север и Урал.</p>
-        <p class="phone">📞 +7 914 341-91-74</p>
-        <div class="deliveries">
-          <h4>📦 Доставленные грузы:</h4>
-          <ul>
-            <li>🧱 Кирпич облицовочный 18т — Москва → Мурманск, 01.10.2026</li>
-            <li>🪵 Брус 22т — Москва → Екатеринбург, 14.10.2026</li>
-            <li>🏠 Кровельные материалы 12т — Москва → Санкт-Петербург, 02.11.2026</li>
-          </ul>
-        </div>
+        <p class="employee-role">Водитель-экспедитор</p>
+        <p class="employee-desc">Стаж вождения 12 лет. Доставляет грузы по маршрутам Москва — Север.</p>
+        <p class="employee-contact">📞 +7 914 341-91-74</p>
       </div>
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#E91E63;">ОВ</div>
+      <!-- Сотрудник 5 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#E91E63;">ОВ</div>
         <h3>Олег Волков</h3>
-        <p class="role">Складской оператор</p>
-        <p class="desc">Приёмка, хранение и отгрузка стройматериалов.</p>
-        <p class="phone">📞 +7 914 341-91-75</p>
-        <div class="deliveries">
-          <h4>📦 Отгружено со склада:</h4>
-          <ul>
-            <li>🧪 Минвата 10т → Новосибирск, 08.10.2026</li>
-            <li>🔩 Метизы 6т → Ростов-на-Дону, 19.10.2026</li>
-            <li>🪟 Стеклопакеты 7т → Казань, 30.10.2026</li>
-          </ul>
-        </div>
+        <p class="employee-role">Складской оператор</p>
+        <p class="employee-desc">Отвечает за приёмку, хранение и отгрузку стройматериалов.</p>
+        <p class="employee-contact">📞 +7 914 341-91-75</p>
       </div>
 
-      <div class="card employee-card">
-        <div class="avatar" style="background:#00BCD4;">НБ</div>
+      <!-- Сотрудник 6 -->
+      <div class="employee-card">
+        <div class="employee-photo" style="background:#00BCD4;">НБ</div>
         <h3>Наталья Белова</h3>
-        <p class="role">Бухгалтер</p>
-        <p class="desc">Документооборот и расчёт стоимости.</p>
-        <p class="phone">📞 +7 914 341-91-76</p>
-        <div class="deliveries">
-          <h4>📦 Оформлено перевозок:</h4>
-          <ul>
-            <li>📋 47 накладных за октябрь 2026</li>
-            <li>💰 Общий оборот: 2 340 000 ₽</li>
-            <li>🚛 38 рейсов без задержек</li>
-          </ul>
-        </div>
+        <p class="employee-role">Бухгалтер</p>
+        <p class="employee-desc">Ведёт документооборот и рассчитывает стоимость перевозок.</p>
+        <p class="employee-contact">📞 +7 914 341-91-76</p>
       </div>
 
     </div>
   </section>
 
-  <!-- РАЗДЕЛ: КАРТА -->
-  <section class="page" id="map" style="display:none;">
-    <div class="page-header">
-      <h2>Карта маршрутов</h2>
-      <p>География перевозок по России</p>
+  <!-- ===== РАЗДЕЛ: КАРТА ===== -->
+  <!-- РЕДАКТИРОВАТЬ: меняйте данные в .route-info и .map-stats -->
+  <section class="section" id="map">
+    <div class="section-header">
+      <h2>Маршрут перевозки</h2>
+      <p class="section-subtitle">Москва → Мурманск — доставка стройматериалов</p>
     </div>
 
-    <div class="map-wrap">
-      <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
-        <rect width="1000" height="500" fill="#0d2137" rx="12"/>
+    <div class="map-container">
+      <!-- SVG-карта России с маршрутом -->
+      <svg class="russia-map" viewBox="0 0 900 450" xmlns="http://www.w3.org/2000/svg">
+        <!-- Фон карты -->
+        <rect width="900" height="450" fill="#0d2137" rx="12"/>
 
-        <!-- Контур России (упрощённый) -->
-        <path d="M100,250 Q130,200 180,190 L240,180 Q300,170 360,175 L420,170 Q490,165 560,170 L640,175 Q720,180 800,195 L870,215 Q900,240 890,270 L870,300 Q830,320 780,330 L720,340 Q650,345 580,340 L510,335 Q440,330 370,335 L300,340 Q230,345 170,335 L120,320 Q100,290 100,250 Z"
-              fill="#1a3a5c" stroke="#2a5a8c" stroke-width="2" opacity="0.7"/>
+        <!-- Упрощённый контур России -->
+        <path d="M80,200 Q120,150 200,160 L280,140 Q350,120 420,130 L500,120 Q580,110 660,130 L740,140 Q800,150 830,180 L820,220 Q800,260 740,270 L660,280 Q580,290 500,280 L420,290 Q350,300 280,290 L200,280 Q140,270 100,250 Q80,230 80,200 Z"
+              fill="#1a3a5c" stroke="#2a5a8c" stroke-width="2"/>
 
-        <!-- Маршруты -->
-        <line x1="320" y1="250" x2="260" y2="190" stroke="#76FF03" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="270" y2="130" stroke="#FF9800" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="450" y2="235" stroke="#00BCD4" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="540" y2="220" stroke="#E91E63" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="340" y2="320" stroke="#9C27B0" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="640" y2="210" stroke="#FFEB3B" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="720" y2="205" stroke="#FF5722" stroke-width="2" stroke-dasharray="8,5"/>
-        <line x1="320" y1="250" x2="850" y2="220" stroke="#4CAF50" stroke-width="2" stroke-dasharray="8,5"/>
+        <!-- Маршрут Москва → Мурманск (пунктирная линия) -->
+        <path d="M230,230 Q200,180 220,140 Q240,100 260,90"
+              fill="none" stroke="#76FF03" stroke-width="4" stroke-dasharray="10,6"/>
 
-        <!-- Москва -->
-        <circle cx="320" cy="250" r="11" fill="#FF5722" stroke="#fff" stroke-width="2"/>
-        <text x="335" y="255" fill="#fff" font-size="13" font-weight="bold">Москва</text>
+        <!-- Стрелка направления -->
+        <polygon points="255,95 265,85 270,100" fill="#76FF03"/>
 
-        <!-- Санкт-Петербург -->
-        <circle cx="260" cy="190" r="7" fill="#76FF03" stroke="#fff" stroke-width="1.5"/>
-        <text x="170" y="185" fill="#ccc" font-size="11">Санкт-Петербург</text>
+        <!-- Точка: Москва -->
+        <circle cx="230" cy="230" r="10" fill="#FF5722"/>
+        <text x="245" y="235" fill="#fff" font-size="14" font-weight="bold">Москва</text>
 
-        <!-- Мурманск -->
-        <circle cx="270" cy="130" r="7" fill="#FF9800" stroke="#fff" stroke-width="1.5"/>
-        <text x="195" y="125" fill="#ccc" font-size="11">Мурманск</text>
+        <!-- Точка: Мурманск -->
+        <circle cx="260" cy="90" r="10" fill="#FF5722"/>
+        <text x="275" y="95" fill="#fff" font-size="14" font-weight="bold">Мурманск</text>
 
-        <!-- Казань -->
-        <circle cx="450" cy="235" r="7" fill="#00BCD4" stroke="#fff" stroke-width="1.5"/>
-        <text x="460" y="230" fill="#ccc" font-size="11">Казань</text>
-
-        <!-- Екатеринбург -->
-        <circle cx="540" cy="220" r="7" fill="#E91E63" stroke="#fff" stroke-width="1.5"/>
-        <text x="550" y="215" fill="#ccc" font-size="11">Екатеринбург</text>
-
-        <!-- Ростов-на-Дону -->
-        <circle cx="340" cy="320" r="7" fill="#9C27B0" stroke="#fff" stroke-width="1.5"/>
-        <text x="350" y="335" fill="#ccc" font-size="11">Ростов-на-Дону</text>
-
-        <!-- Новосибирск -->
-        <circle cx="640" cy="210" r="7" fill="#FFEB3B" stroke="#fff" stroke-width="1.5"/>
-        <text x="650" y="205" fill="#ccc" font-size="11">Новосибирск</text>
-
-        <!-- Красноярск -->
-        <circle cx="720" cy="205" r="7" fill="#FF5722" stroke="#fff" stroke-width="1.5"/>
-        <text x="730" y="200" fill="#ccc" font-size="11">Красноярск</text>
-
-        <!-- Владивосток -->
-        <circle cx="850" cy="220" r="7" fill="#4CAF50" stroke="#fff" stroke-width="1.5"/>
-        <text x="860" y="215" fill="#ccc" font-size="11">Владивосток</text>
+        <!-- Грузовик на маршруте -->
+        <text x="220" y="170" font-size="28">🚛</text>
 
         <!-- Легенда -->
-        <circle cx="50" cy="450" r="6" fill="#FF5722"/>
-        <text x="65" y="455" fill="#ccc" font-size="11">Москва — центр</text>
-        <line x1="50" y1="475" x2="80" y2="475" stroke="#76FF03" stroke-width="2" stroke-dasharray="6,4"/>
-        <text x="90" y="480" fill="#ccc" font-size="11">Маршруты</text>
+        <circle cx="50" cy="410" r="6" fill="#FF5722"/>
+        <text x="65" y="415" fill="#ccc" font-size="12">Города отправления/назначения</text>
+
+        <line x1="50" y1="430" x2="80" y2="430" stroke="#76FF03" stroke-width="3" stroke-dasharray="6,4"/>
+        <text x="90" y="435" fill="#ccc" font-size="12">Маршрут перевозки</text>
       </svg>
-    </div>
 
-    <div class="stats">
-      <div class="stat"><div class="stat-icon">📏</div><div class="stat-lbl">Маршрутов</div><div class="stat-val">8</div></div>
-      <div class="stat"><div class="stat-icon">🚛</div><div class="stat-lbl">Рейсов/мес</div><div class="stat-val">38+</div></div>
-      <div class="stat"><div class="stat-icon">📦</div><div class="stat-lbl">Доставлено</div><div class="stat-val">420 т</div></div>
-      <div class="stat"><div class="stat-icon">🗺️</div><div class="stat-lbl">География</div><div class="stat-val">Вся РФ</div></div>
-    </div>
-
-    <div class="table-wrap">
-      <h3>📋 Активные маршруты</h3>
-      <table class="routes-table">
-        <thead>
-          <tr><th>Откуда</th><th>Куда</th><th>Расстояние</th><th>Топливо</th><th>Цена</th><th>Время</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>Москва</td><td>Санкт-Петербург</td><td>710 км</td><td>213 л</td><td>18 500 ₽</td><td>~10 ч</td></tr>
-          <tr><td>Москва</td><td>Мурманск</td><td>2 067 км</td><td>620 л</td><td>36 719 ₽</td><td>~28 ч</td></tr>
-          <tr><td>Москва</td><td>Казань</td><td>820 км</td><td>246 л</td><td>21 300 ₽</td><td>~12 ч</td></tr>
-          <tr><td>Москва</td><td>Екатеринбург</td><td>1 790 км</td><td>537 л</td><td>32 400 ₽</td><td>~24 ч</td></tr>
-          <tr><td>Москва</td><td>Ростов-на-Дону</td><td>1 070 км</td><td>321 л</td><td>24 800 ₽</td><td>~15 ч</td></tr>
-          <tr><td>Москва</td><td>Новосибирск</td><td>3 360 км</td><td>1 008 л</td><td>58 200 ₽</td><td>~45 ч</td></tr>
-          <tr><td>Москва</td><td>Красноярск</td><td>4 130 км</td><td>1 239 л</td><td>71 500 ₽</td><td>~55 ч</td></tr>
-          <tr><td>Москва</td><td>Владивосток</td><td>9 200 км</td><td>2 760 л</td><td>142 000 ₽</td><td>~120 ч</td></tr>
-        </tbody>
-      </table>
+      <!-- Блок статистики перевозки -->
+      <div class="map-stats">
+        <div class="stat-card">
+          <div class="stat-icon">📏</div>
+          <div class="stat-label">Расстояние</div>
+          <div class="stat-value">2 067 км</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⛽</div>
+          <div class="stat-label">Расход бензина</div>
+          <div class="stat-value">620 л</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-label">Стоимость перевозки</div>
+          <div class="stat-value">36 719 ₽</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🕐</div>
+          <div class="stat-label">Время в пути</div>
+          <div class="stat-value">~28 ч</div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- РАЗДЕЛ: КЛИЕНТЫ -->
-  <section class="page" id="clients" style="display:none;">
-    <div class="page-header">
-      <h2>Клиенты и отзывы</h2>
-      <p>Кто заказывал доставку стройматериалов</p>
+  <!-- ===== РАЗДЕЛ: КЛИЕНТЫ ===== -->
+  <!-- РЕДАКТИРОВАТЬ: добавляйте/меняйте карточки внутри .clients-grid -->
+  <section class="section" id="clients">
+    <div class="section-header">
+      <h2>Наши клиенты</h2>
+      <p class="section-subtitle">Отзывы компаний, которые заказывали доставку стройматериалов</p>
     </div>
-    <div class="grid clients-grid">
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#4CAF50;">СК</div>
-          <div><h3>ООО «СтройКомплект»</h3><p class="city">📍 Санкт-Петербург</p></div>
+    <div class="clients-grid">
+
+      <!-- Клиент 1 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#4CAF50;">СК</div>
+          <div>
+            <h3>ООО «СтройКомплект»</h3>
+            <p class="client-city">📍 Доставка в: Санкт-Петербург</p>
+          </div>
         </div>
-        <div class="rating">★★★★★</div>
-        <p class="review">«Кирпич и цемент прибыли точно в срок, без повреждений. Отличная компания!»</p>
-        <p class="date">15 октября 2026</p>
+        <div class="client-rating">★★★★★</div>
+        <p class="client-review">«Заказывали доставку кирпича и цемента. Груз прибыл точно в срок, без повреждений. Отличная компания, будем обращаться ещё!»</p>
+        <p class="client-date">15 октября 2026</p>
       </div>
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#2196F3;">МД</div>
-          <div><h3>ИП Морозов Д.А.</h3><p class="city">📍 Мурманск</p></div>
+      <!-- Клиент 2 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#2196F3;">МД</div>
+          <div>
+            <h3>ИП Морозов Д.А.</h3>
+            <p class="client-city">📍 Доставка в: Мурманск</p>
+          </div>
         </div>
-        <div class="rating">★★★★★</div>
-        <p class="review">«Везли утеплитель и пиломатериалы на север. Всё доехало в идеальном состоянии.»</p>
-        <p class="date">2 декабря 2026</p>
+        <div class="client-rating">★★★★★</div>
+        <p class="client-review">«Везли утеплитель и пиломатериалы на север. Переживал за сохранность, но всё доехало в идеальном состоянии. Рекомендую!»</p>
+        <p class="client-date">2 декабря 2026</p>
       </div>
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#FF9800;">ТМ</div>
-          <div><h3>ООО «ТеплоМонтаж»</h3><p class="city">📍 Казань</p></div>
+      <!-- Клиент 3 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#FF9800;">ТМ</div>
+          <div>
+            <h3>ООО «ТеплоМонтаж»</h3>
+            <p class="client-city">📍 Доставка в: Казань</p>
+          </div>
         </div>
-        <div class="rating">★★★★☆</div>
-        <p class="review">«Хороший сервис, адекватные цены. Документы оформили чуть долго, но всё супер.»</p>
-        <p class="date">28 сентября 2026</p>
+        <div class="client-rating">★★★★☆</div>
+        <p class="client-review">«Хороший сервис, адекватные цены. Единственное — хотелось бы чуть быстрее оформить документы. В остальном всё супер.»</p>
+        <p class="client-date">28 сентября 2026</p>
       </div>
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#9C27B0;">ДС</div>
-          <div><h3>АО «ДонСтрой»</h3><p class="city">📍 Ростов-на-Дону</p></div>
+      <!-- Клиент 4 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#9C27B0;">ДС</div>
+          <div>
+            <h3>АО «ДонСтрой»</h3>
+            <p class="client-city">📍 Доставка в: Ростов-на-Дону</p>
+          </div>
         </div>
-        <div class="rating">★★★★★</div>
-        <p class="review">«Работаем третий год. Надёжный партнёр, менеджеры всегда на связи.»</p>
-        <p class="date">10 ноября 2026</p>
+        <div class="client-rating">★★★★★</div>
+        <p class="client-review">«Работаем уже третий год. Надёжный партнёр для перевозки строительных материалов. Менеджеры всегда на связи.»</p>
+        <p class="client-date">10 ноября 2026</p>
       </div>
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#E91E63;">УС</div>
-          <div><h3>ООО «УралСнаб»</h3><p class="city">📍 Екатеринбург</p></div>
+      <!-- Клиент 5 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#E91E63;">УС</div>
+          <div>
+            <h3>ООО «УралСнаб»</h3>
+            <p class="client-city">📍 Доставка в: Екатеринбург</p>
+          </div>
         </div>
-        <div class="rating">★★★★★</div>
-        <p class="review">«Металлоконструкции — всё чётко. Водитель помог с разгрузкой. Спасибо!»</p>
-        <p class="date">5 ноября 2026</p>
+        <div class="client-rating">★★★★★</div>
+        <p class="client-review">«Перевозили металлоконструкции. Всё чётко, профессионально. Водитель помог с разгрузкой. Спасибо!»</p>
+        <p class="client-date">5 ноября 2026</p>
       </div>
 
-      <div class="card client-card">
-        <div class="client-head">
-          <div class="avatar small" style="background:#00BCD4;">СБ</div>
-          <div><h3>ИП Соколова В.И.</h3><p class="city">📍 Новосибирск</p></div>
+      <!-- Клиент 6 -->
+      <div class="client-card">
+        <div class="client-header">
+          <div class="client-avatar" style="background:#00BCD4;">СБ</div>
+          <div>
+            <h3>ИП Соколова В.И.</h3>
+            <p class="client-city">📍 Доставка в: Новосибирск</p>
+          </div>
         </div>
-        <div class="rating">★★★★☆</div>
-        <p class="review">«Доставка чуть дольше обещанного, но груз целый. Цена ниже конкурентов.»</p>
-        <p class="date">20 октября 2026</p>
+        <div class="client-rating">★★★★☆</div>
+        <p class="client-review">«Доставка заняла чуть больше обещанного срока, но груз целый. Цена приятно удивила — дешевле конкурентов.»</p>
+        <p class="client-date">20 октября 2026</p>
       </div>
 
     </div>
   </section>
 
-  <!-- МОДАЛКА: О КОМПАНИИ -->
-  <div class="modal-bg" id="modal">
+  <!-- ===== МОДАЛЬНОЕ ОКНО: О КОМПАНИИ ===== -->
+  <!-- РЕДАКТИРОВАТЬ: меняйте текст внутри .company-modal-content -->
+  <div class="modal-overlay" id="companyModal">
     <div class="modal">
-      <button class="modal-x" id="closeModal">✕</button>
-      <h2>О компании «Сборные грузы»</h2>
+      <button class="modal-close" id="closeCompanyInfo">✕</button>
 
-      <div class="info-block">
-        <h3>📌 О нас</h3>
-        <p>Транспортная компания, перевозка сборных грузов и стройматериалов по России. Работаем с 2010 года. Автопарк 25 машин, страхование грузов, доставка в 8 крупных городов.</p>
-      </div>
+      <div class="company-modal-content">
+        <h2>О компании «Сборные грузы»</h2>
 
-      <div class="info-block">
-        <h3>🏢 Реквизиты</h3>
-        <p><b>Адрес:</b> г. Москва, ул. Складская, 15/2</p>
-        <p><b>Телефон:</b> +7 914 341-91-71</p>
-        <p><b>Email:</b> info@sbornye-gruzy.ru</p>
-        <p><b>Режим:</b> Пн–Вс, 08:00–22:00</p>
-      </div>
+        <div class="company-info-block">
+          <h3>📌 О нас</h3>
+          <p>Мы — транспортная компания, специализирующаяся на перевозке сборных грузов и стройматериалов по всей России. Работаем с 2010 года. Собственный автопарк, опытные водители, страхование грузов.</p>
+        </div>
 
-      <div class="info-block">
-        <h3>⭐ Отзывы о компании</h3>
-        <div class="c-review"><b>Андрей К.</b> <span class="stars">★★★★★</span><p>«Оборудование в Красноярск — всё вовремя.»</p></div>
-        <div class="c-review"><b>Ирина М.</b> <span class="stars">★★★★★</span><p>«2 года без задержек, менеджеры вежливые.»</p></div>
-        <div class="c-review"><b>Сергей В.</b> <span class="stars">★★★★☆</span><p>«Хороший сервис, в час пик сложно дозвониться.»</p></div>
-        <div class="c-review"><b>Ольга П.</b> <span class="stars">★★★★★</span><p>«Во Владивосток — дешевле конкурентов, 5 дней.»</p></div>
+        <div class="company-info-block">
+          <h3>🏢 Реквизиты</h3>
+          <p><strong>Адрес:</strong> г. Москва, ул. Складская, д. 15, стр. 2</p>
+          <p><strong>Телефон:</strong> +7 914 341-91-71</p>
+          <p><strong>Email:</strong> info@sbornye-gruzy.ru</p>
+          <p><strong>Режим работы:</strong> Пн–Вс, 08:00–22:00</p>
+        </div>
+
+        <div class="company-info-block">
+          <h3>⭐ Отзывы о компании</h3>
+
+          <div class="company-review">
+            <strong>Андрей К.</strong> <span class="stars">★★★★★</span>
+            <p>«Отличная компания! Перевозили оборудование из Москвы в Красноярск — всё вовремя и без проблем.»</p>
+          </div>
+
+          <div class="company-review">
+            <strong>Ирина М.</strong> <span class="stars">★★★★★</span>
+            <p>«Пользуемся услугами уже 2 года. Ни одной задержки, менеджеры вежливые, цены адекватные.»</p>
+          </div>
+
+          <div class="company-review">
+            <strong>Сергей В.</strong> <span class="stars">★★★★☆</span>
+            <p>«Хороший сервис. Единственный минус — иногда сложно дозвониться в час пик. В остальном — рекомендую.»</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- ===== СКРИПТ (передать другому разработчику для доработки) ===== -->
+  <script>
+    // Переключение разделов
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const sections = document.querySelectorAll('.section');
+
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        navBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const target = btn.dataset.section;
+        sections.forEach(s => s.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    // Модалка «О компании»
+    const modal = document.getElementById('companyModal');
+    const openBtn = document.getElementById('openCompanyInfo');
+    const closeBtn = document.getElementById('closeCompanyInfo');
+
+    openBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      modal.classList.add('show');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('show');
+    });
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.classList.remove('show');
+    });
+  </script>
+
 </body>
 </html>
