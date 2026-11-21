@@ -1,0 +1,277 @@
+// ===== ДАННЫЕ =====
+let employees = [
+    { id: 1, name: 'Иванов А.П.', position: 'Водитель', status: 'free', phone: '+7 914 341-91-71' },
+    { id: 2, name: 'Петров С.И.', position: 'Грузчик', status: 'busy', phone: '+7 914 341-91-72' },
+    { id: 3, name: 'Сидоров М.В.', position: 'Диспетчер', status: 'free', phone: '+7 914 341-91-73' },
+    { id: 4, name: 'Козлов Д.А.', position: 'Водитель', status: 'vacation', phone: '+7 914 341-91-74' }
+];
+
+let tasks = [
+    { id: 1, text: 'Доставка в Мурманск', status: 'urgent', employee: 'Иванов А.П.' },
+    { id: 2, text: 'Погрузка на складе №3', status: 'progress', employee: 'Петров С.И.' },
+    { id: 3, text: 'Оформление документов', status: 'done', employee: 'Сидоров М.В.' }
+];
+
+let clients = [
+    { id: 1, name: 'ООО "СтройМастер"', desc: 'Крупный поставщик стройматериалов. Работаем с 2020 года.', rating: 5 },
+    { id: 2, name: 'ИП Смирнов', desc: 'Частный предприниматель, регулярные перевозки.', rating: 4 },
+    { id: 3, name: 'АО "МегаСтрой"', desc: 'Федеральная сеть строительных магазинов.', rating: 5 }
+];
+let reviews = [
+    { author: 'ООО "СтройМастер"', text: 'Отличная компания! Доставляют всегда в срок.', date: '15.11.2026' },
+    { author: 'ИП Смирнов', text: 'Работаем уже 3 года. Рекомендую!', date: '10.11.2026' },
+    { author: 'АО "МегаСтрой"', text: 'Профессиональный подход, адекватные цены.', date: '05.11.2026' }
+];
+
+const cityCoords = {
+    'Москва': { x: 150, y: 220 },
+    'Санкт-Петербург': { x: 180, y: 180 },
+    'Мурманск': { x: 130, y: 190 },
+    'Нижний Новгород': { x: 220, y: 200 },
+    'Екатеринбург': { x: 350, y: 200 },
+    'Новосибирск': { x: 500, y: 190 },
+    'Владивосток': { x: 650, y: 200 }
+};
+
+const distances = {
+    'Москва-Мурманск': 2100, 'Москва-Санкт-Петербург': 710,
+    'Москва-Нижний Новгород': 420, 'Москва-Екатеринбург': 1800,
+    'Москва-Новосибирск': 3300, 'Москва-Владивосток': 9200,
+    'Санкт-Петербург-Мурманск': 1400, 'Санкт-Петербург-Екатеринбург': 2200,
+    'Екатеринбург-Новосибирск': 1500, 'Новосибирск-Владивосток': 5800,
+    'Мурманск-Екатеринбург': 2500, 'Нижний Новгород-Новосибирск': 2900
+};
+
+// ===== ОТРИСОВКА ГОРОДОВ НА КАРТЕ =====
+function renderMapCities() {
+    const g = document.getElementById('cities');
+    const svgNS = 'http://www.w3.org/2000/svg';
+    g.innerHTML = '';
+    Object.entries(cityCoords).forEach(([name, c]) => {
+        const circle = document.createElementNS(svgNS, 'circle');
+        circle.setAttribute('cx', c.x); circle.setAttribute('cy', c.y);
+        circle.setAttribute('r', 7); circle.setAttribute('fill', '#00d4aa');
+        circle.classList.add('city');
+        circle.addEventListener('click', () => {
+            document.getElementById('cityFrom').value = name;
+            alert(`Город "${name}" выбран как точка отправления`);
+        });
+        g.appendChild(circle);
+        const text = document.createElementNS(svgNS, 'text');
+        text.setAttribute('x', c.x); text.setAttribute('y', c.y - 12);
+        text.setAttribute('fill', '#fff'); text.setAttribute('font-size', '11');
+        text.setAttribute('text-anchor', 'middle');
+        text.textContent = name;
+        g.appendChild(text);
+    });
+}
+
+// ===== ЗАПОЛНЕНИЕ СЕЛЕКТОВ =====
+function fillCitySelects() {
+    const from = document.getElementById('cityFrom');
+    const to = document.getElementById('cityTo');
+    Object.keys(cityCoords).forEach(city => {
+        from.add(new Option(city, city));
+        to.add(new Option(city, city));
+    });
+    from.value = 'Москва';
+    to.value = 'Мурманск';
+}
+
+// ===== РЕНДЕР ВСЕГО =====
+function renderEmployees() {
+    document.getElementById('employeeList').innerHTML = employees.map(e => `
+        <div class="employee-card">
+            <h4>${e.name}</h4>
+            <p>📋 ${e.position}</p>
+            <p>📞 ${e.phone}</p>
+            <span class="employee-status status-${e.status}">
+                ${e.status === 'free' ? '✅ Свободен' : e.status === 'busy' ? '🔧 Занят' : '🏖️ Отпуск'}
+            </span>
+        </div>`).join('');
+}
+
+function renderTasks() {
+    const map = { urgent: 'tasksUrgent', progress: 'tasksProgress', done: 'tasksDone' };
+    Object.entries(map).forEach(([status, id]) => {
+        document.getElementById(id).innerHTML = tasks.filter(t => t.status === status)
+            .map(t => `<div class="task-item">${t.text}<br><small>${t.employee}</small></div>`).join('');
+    });
+}
+
+function renderClients() {
+    document.getElementById('clientsGrid').innerHTML = clients.map(c => `
+        <div class="client-card">
+            <h4>${c.name}</h4>
+            <p class="client-desc">${c.desc}</p>
+            <div class="client-rating">${'⭐'.repeat(c.rating)}</div>
+        </div>`).join('');
+}
+
+function renderReviews() {
+    document.getElementById('reviewsList').innerHTML = reviews.map(r => `
+        <div class="review-item">
+            <div class="review-author">${r.author}</div>
+            <div class="review-text">${r.text}</div>
+            <div class="review-date">${r.date}</div>
+        </div>`).join('');
+}
+
+// ===== ВКЛАДКИ =====
+document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        btn.classList.add('active');
+    });
+});
+
+// ===== МАРШРУТ =====
+function calculateRoute() {
+    const from = document.getElementById('cityFrom').value;
+    const to = document.getElementById('cityTo').value;
+    if (from === to) return alert('Выберите разные города!');
+
+    const key1 = `${from}-${to}`, key2 = `${to}-${from}`;
+    const distance = distances[key1] || distances[key2] || Math.floor(Math.random() * 3000 + 500);
+    const fuel = (distance / 100 * 25).toFixed(1);
+    const cost = Math.round(fuel * 52);
+    const time = (distance / 80).toFixed(1);
+
+    document.getElementById('routeDistance').textContent = distance + ' км';
+    document.getElementById('routeFuel').textContent = fuel + ' л';
+    document.getElementById('routeCost').textContent = cost.toLocaleString('ru') + ' ₽';
+    document.getElementById('routeTime').textContent = time + ' ч';
+    document.getElementById('routeResult').style.display = 'block';
+
+    const s = cityCoords[from], e = cityCoords[to];
+    const line = document.getElementById('routeLine');
+    line.setAttribute('x1', s.x); line.setAttribute('y1', s.y);
+    line.setAttribute('x2', e.x); line.setAttribute('y2', e.y);
+    line.style.display = 'block';
+    const sc = document.getElementById('routeStart');
+    sc.setAttribute('cx', s.x); sc.setAttribute('cy', s.y); sc.style.display = 'block';
+    const ec = document.getElementById('routeEnd');
+    ec.setAttribute('cx', e.x); ec.setAttribute('cy', e.y); ec.style.display = 'block';
+}
+
+function clearRoute() {
+    ['routeLine', 'routeStart', 'routeEnd', 'routeResult'].forEach(id =>
+        document.getElementById(id).style.display = 'none');
+}
+
+// ===== КАЛЬКУЛЯТОР =====
+function toggleCalculator() {
+    document.getElementById('calculatorModal').classList.toggle('active');
+}
+
+function calculatePrice() {
+    const weight = parseFloat(document.getElementById('calcWeight').value) || 500;
+    const tariff = parseFloat(document.getElementById('calcTariff').value) || 1;
+    const price = Math.round((15000 + weight * 30) * tariff);
+    document.getElementById('calcPrice').textContent = price.toLocaleString('ru') + ' ₽';
+    const d = new Date();
+    const m = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    document.getElementById('calcDate').textContent = d.getDate() + ' ' + m[d.getMonth()];
+}
+
+// ===== МОДАЛКИ =====
+function openModal(type) {
+    const c = document.getElementById('modalContent');
+    const empOptions = employees.map(e => `<option>${e.name}</option>`).join('');
+    const templates = {
+        login: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Вход</h3><label>Email:</label><input id="loginEmail">
+            <label>Пароль:</label><input type="password" id="loginPassword">
+            <button class="btn-submit" onclick="doLogin()">Войти</button>`,
+        register: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Регистрация</h3><label>Имя:</label><input id="regName">
+            <label>Email:</label><input id="regEmail">
+            <label>Пароль:</label><input type="password" id="regPassword">
+            <button class="btn-submit" onclick="doRegister()">Зарегистрироваться</button>`,
+        addEmployee: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Добавить сотрудника</h3><label>ФИО:</label><input id="empName">
+            <label>Должность:</label><input id="empPosition">
+            <label>Телефон:</label><input id="empPhone">
+            <button class="btn-submit" onclick="addEmployee()">Добавить</button>`,
+        assignTask: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Назначить задачу</h3><label>Описание:</label><textarea id="taskText"></textarea>
+            <label>Сотрудник:</label><select id="taskEmployee">${empOptions}</select>
+            <label>Приоритет:</label><select id="taskPriority">
+            <option value="urgent">🔴 Срочно</option><option value="progress">🟡 В работе</option>
+            <option value="done">🟢 Выполнено</option></select>
+            <button class="btn-submit" onclick="addTask()">Назначить</button>`,
+        materials: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Распределить материалы</h3><label>Материал:</label>
+            <select id="materialType"><option>Цемент</option><option>Кирпич</option>
+            <option>Доски</option><option>Металлоконструкции</option></select>
+            <label>Количество:</label><input type="number" id="materialAmount">
+            <label>Сотрудник:</label><select id="materialEmployee">${empOptions}</select>
+            <button class="btn-submit" onclick="assignMaterials()">Распределить</button>`,
+        addClient: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>Добавить клиента</h3><label>Название:</label><input id="clientName">
+            <label>Описание:</label><textarea id="clientDesc"></textarea>
+            <label>Рейтинг:</label><select id="clientRating">
+            <option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option>
+            <option value="3">⭐⭐⭐</option></select>
+            <button class="btn-submit" onclick="addClient()">Добавить</button>`,
+        company: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
+            <h3>🏢 О компании</h3>
+            <p style="color:#b0c4de;line-height:1.6;margin-top:15px">Ведущая компания по перевозке сборных грузов и стройматериалов по России с 2015 года.</p>
+            <p style="color:#b0c4de;line-height:1.6;margin-top:15px">📞 +7 914 341-91-71<br>📧 info@sbornye-gruzy.ru<br>📍 Москва, ул. Транспортная, 15</p>
+            <p style="color:#00ffcc;margin-top:20px;font-weight:600">✅ 1000+ клиентов • 50+ городов • Собственный автопарк</p>`
+    };
+    c.innerHTML = templates[type] || '';
+    document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal(e) { if (e.target.id === 'modalOverlay') closeModalDirect(); }
+function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('active'); }
+
+// ===== ДЕЙСТВИЯ =====
+function doLogin() {
+    const e = document.getElementById('loginEmail').value;
+    if (e) { alert('Добро пожаловать, ' + e + '!'); closeModalDirect(); } else alert('Введите email!');
+}
+function doRegister() {
+    const n = document.getElementById('regName').value;
+    if (n) { alert('Регистрация успешна!'); closeModalDirect(); } else alert('Заполните поля!');
+}
+function addEmployee() {
+    const n = document.getElementById('empName').value, p = document.getElementById('empPosition').value;
+    if (n && p) {
+        employees.push({ id: employees.length + 1, name: n, position: p, status: 'free', phone: document.getElementById('empPhone').value || '—' });
+        renderEmployees(); closeModalDirect(); alert('Сотрудник добавлен!');
+    } else alert('Заполните ФИО и должность!');
+}
+function addTask() {
+    const t = document.getElementById('taskText').value;
+    if (t) {
+        tasks.push({ id: tasks.length + 1, text: t, status: document.getElementById('taskPriority').value, employee: document.getElementById('taskEmployee').value });
+        renderTasks(); closeModalDirect(); alert('Задача назначена!');
+    } else alert('Введите описание!');
+}
+function assignMaterials() {
+    const m = document.getElementById('materialType').value, a = document.getElementById('materialAmount').value;
+    if (a) { alert(`${m} (${a}) → ${document.getElementById('materialEmployee').value}`); closeModalDirect(); }
+    else alert('Укажите количество!');
+}
+function addClient() {
+    const n = document.getElementById('clientName').value;
+    if (n) {
+        clients.push({ id: clients.length + 1, name: n, desc: document.getElementById('clientDesc').value, rating: +document.getElementById('clientRating').value });
+        renderClients(); closeModalDirect(); alert('Клиент добавлен!');
+    } else alert('Введите название!');
+}
+
+// ===== СТАРТ =====
+document.addEventListener('DOMContentLoaded', () => {
+    fillCitySelects();
+    renderMapCities();
+    renderEmployees();
+    renderTasks();
+    renderClients();
+    renderReviews();
+    console.log('✅ Сайт «Сборные Грузы» запущен');
+});
