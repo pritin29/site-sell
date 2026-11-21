@@ -1,277 +1,333 @@
-// ===== ДАННЫЕ =====
-let employees = [
-    { id: 1, name: 'Иванов А.П.', position: 'Водитель', status: 'free', phone: '+7 914 341-91-71' },
-    { id: 2, name: 'Петров С.И.', position: 'Грузчик', status: 'busy', phone: '+7 914 341-91-72' },
-    { id: 3, name: 'Сидоров М.В.', position: 'Диспетчер', status: 'free', phone: '+7 914 341-91-73' },
-    { id: 4, name: 'Козлов Д.А.', position: 'Водитель', status: 'vacation', phone: '+7 914 341-91-74' }
-];
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Сборные грузы</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-let tasks = [
-    { id: 1, text: 'Доставка в Мурманск', status: 'urgent', employee: 'Иванов А.П.' },
-    { id: 2, text: 'Погрузка на складе №3', status: 'progress', employee: 'Петров С.И.' },
-    { id: 3, text: 'Оформление документов', status: 'done', employee: 'Сидоров М.В.' }
-];
+  <header class="header">
+    <div class="logo">СБОРНЫЕ ГРУЗЫ</div>
+    <div class="auth-buttons">
+      <button class="btn-auth">Вход</button>
+      <button class="btn-auth">Регистрация</button>
+    </div>
+  </header>
 
-let clients = [
-    { id: 1, name: 'ООО "СтройМастер"', desc: 'Крупный поставщик стройматериалов. Работаем с 2020 года.', rating: 5 },
-    { id: 2, name: 'ИП Смирнов', desc: 'Частный предприниматель, регулярные перевозки.', rating: 4 },
-    { id: 3, name: 'АО "МегаСтрой"', desc: 'Федеральная сеть строительных магазинов.', rating: 5 }
-];
-let reviews = [
-    { author: 'ООО "СтройМастер"', text: 'Отличная компания! Доставляют всегда в срок.', date: '15.11.2026' },
-    { author: 'ИП Смирнов', text: 'Работаем уже 3 года. Рекомендую!', date: '10.11.2026' },
-    { author: 'АО "МегаСтрой"', text: 'Профессиональный подход, адекватные цены.', date: '05.11.2026' }
-];
+  <nav class="nav">
+    <button class="nav-btn active" data-target="employees">СОТРУДНИКИ</button>
+    <button class="nav-btn" data-target="map">
+      <span class="nav-text">КАРТА</span>
+      <span class="info-circle" id="openInfo" title="О компании">i</span>
+    </button>
+    <button class="nav-btn" data-target="clients">КЛИЕНТЫ</button>
+  </nav>
 
-const cityCoords = {
-    'Москва': { x: 150, y: 220 },
-    'Санкт-Петербург': { x: 180, y: 180 },
-    'Мурманск': { x: 130, y: 190 },
-    'Нижний Новгород': { x: 220, y: 200 },
-    'Екатеринбург': { x: 350, y: 200 },
-    'Новосибирск': { x: 500, y: 190 },
-    'Владивосток': { x: 650, y: 200 }
-};
+  <!-- РАЗДЕЛ: СОТРУДНИКИ -->
+  <section class="page" id="employees">
+    <div class="page-header">
+      <h2>Сотрудники и доставленные грузы</h2>
+      <p>Команда и история выполненных перевозок</p>
+    </div>
+    <div class="grid employees-grid">
 
-const distances = {
-    'Москва-Мурманск': 2100, 'Москва-Санкт-Петербург': 710,
-    'Москва-Нижний Новгород': 420, 'Москва-Екатеринбург': 1800,
-    'Москва-Новосибирск': 3300, 'Москва-Владивосток': 9200,
-    'Санкт-Петербург-Мурманск': 1400, 'Санкт-Петербург-Екатеринбург': 2200,
-    'Екатеринбург-Новосибирск': 1500, 'Новосибирск-Владивосток': 5800,
-    'Мурманск-Екатеринбург': 2500, 'Нижний Новгород-Новосибирск': 2900
-};
+      <div class="card employee-card">
+        <div class="avatar" style="background:#4CAF50;">АИ</div>
+        <h3>Алексей Иванов</h3>
+        <p class="role">Генеральный директор</p>
+        <p class="desc">Опыт в логистике 15 лет. Руководит с 2010 года.</p>
+        <p class="phone">📞 +7 914 341-91-71</p>
+        <div class="deliveries">
+          <h4>📦 Доставленные грузы:</h4>
+          <ul>
+            <li>🧱 Кирпич 20т — Москва → Санкт-Петербург, 12.09.2026</li>
+            <li>🪵 Пиломатериалы 15т — Москва → Казань, 03.10.2026</li>
+            <li>🏗️ Металлоконструкции 30т — Москва → Екатеринбург, 21.10.2026</li>
+          </ul>
+        </div>
+      </div>
 
-// ===== ОТРИСОВКА ГОРОДОВ НА КАРТЕ =====
-function renderMapCities() {
-    const g = document.getElementById('cities');
-    const svgNS = 'http://www.w3.org/2000/svg';
-    g.innerHTML = '';
-    Object.entries(cityCoords).forEach(([name, c]) => {
-        const circle = document.createElementNS(svgNS, 'circle');
-        circle.setAttribute('cx', c.x); circle.setAttribute('cy', c.y);
-        circle.setAttribute('r', 7); circle.setAttribute('fill', '#00d4aa');
-        circle.classList.add('city');
-        circle.addEventListener('click', () => {
-            document.getElementById('cityFrom').value = name;
-            alert(`Город "${name}" выбран как точка отправления`);
-        });
-        g.appendChild(circle);
-        const text = document.createElementNS(svgNS, 'text');
-        text.setAttribute('x', c.x); text.setAttribute('y', c.y - 12);
-        text.setAttribute('fill', '#fff'); text.setAttribute('font-size', '11');
-        text.setAttribute('text-anchor', 'middle');
-        text.textContent = name;
-        g.appendChild(text);
-    });
-}
+      <div class="card employee-card">
+        <div class="avatar" style="background:#2196F3;">МП</div>
+        <h3>Мария Петрова</h3>
+        <p class="role">Менеджер по клиентам</p>
+        <p class="desc">Рассчитывает стоимость и подбирает тариф.</p>
+        <p class="phone">📞 +7 914 341-91-72</p>
+        <div class="deliveries">
+          <h4>📦 Доставленные грузы:</h4>
+          <ul>
+            <li>🧪 Утеплитель 8т — Москва → Мурманск, 18.09.2026</li>
+            <li>🪟 Окна ПВХ 5т — Москва → Ростов-на-Дону, 05.10.2026</li>
+            <li>🔩 Крепёж 3т — Москва → Новосибирск, 28.10.2026</li>
+          </ul>
+        </div>
+      </div>
 
-// ===== ЗАПОЛНЕНИЕ СЕЛЕКТОВ =====
-function fillCitySelects() {
-    const from = document.getElementById('cityFrom');
-    const to = document.getElementById('cityTo');
-    Object.keys(cityCoords).forEach(city => {
-        from.add(new Option(city, city));
-        to.add(new Option(city, city));
-    });
-    from.value = 'Москва';
-    to.value = 'Мурманск';
-}
+      <div class="card employee-card">
+        <div class="avatar" style="background:#FF9800;">ДС</div>
+        <h3>Дмитрий Сидоров</h3>
+        <p class="role">Начальник логистики</p>
+        <p class="desc">Планирует маршруты по всей России.</p>
+        <p class="phone">📞 +7 914 341-91-73</p>
+        <div class="deliveries">
+          <h4>📦 Доставленные грузы:</h4>
+          <ul>
+            <li>🏠 Сэндвич-панели 25т — Москва → Красноярск, 10.09.2026</li>
+            <li>🪨 Щебень 40т — Москва → Казань, 22.09.2026</li>
+            <li>🏗️ Арматура 35т — Москва → Владивосток, 15.10.2026</li>
+          </ul>
+        </div>
+      </div>
 
-// ===== РЕНДЕР ВСЕГО =====
-function renderEmployees() {
-    document.getElementById('employeeList').innerHTML = employees.map(e => `
-        <div class="employee-card">
-            <h4>${e.name}</h4>
-            <p>📋 ${e.position}</p>
-            <p>📞 ${e.phone}</p>
-            <span class="employee-status status-${e.status}">
-                ${e.status === 'free' ? '✅ Свободен' : e.status === 'busy' ? '🔧 Занят' : '🏖️ Отпуск'}
-            </span>
-        </div>`).join('');
-}
+      <div class="card employee-card">
+        <div class="avatar" style="background:#9C27B0;">ЕК</div>
+        <h3>Елена Козлова</h3>
+        <p class="role">Водитель-экспедитор</p>
+        <p class="desc">Стаж 12 лет. Маршруты: Москва — Север и Урал.</p>
+        <p class="phone">📞 +7 914 341-91-74</p>
+        <div class="deliveries">
+          <h4>📦 Доставленные грузы:</h4>
+          <ul>
+            <li>🧱 Кирпич облицовочный 18т — Москва → Мурманск, 01.10.2026</li>
+            <li>🪵 Брус 22т — Москва → Екатеринбург, 14.10.2026</li>
+            <li>🏠 Кровельные материалы 12т — Москва → Санкт-Петербург, 02.11.2026</li>
+          </ul>
+        </div>
+      </div>
 
-function renderTasks() {
-    const map = { urgent: 'tasksUrgent', progress: 'tasksProgress', done: 'tasksDone' };
-    Object.entries(map).forEach(([status, id]) => {
-        document.getElementById(id).innerHTML = tasks.filter(t => t.status === status)
-            .map(t => `<div class="task-item">${t.text}<br><small>${t.employee}</small></div>`).join('');
-    });
-}
+      <div class="card employee-card">
+        <div class="avatar" style="background:#E91E63;">ОВ</div>
+        <h3>Олег Волков</h3>
+        <p class="role">Складской оператор</p>
+        <p class="desc">Приёмка, хранение и отгрузка стройматериалов.</p>
+        <p class="phone">📞 +7 914 341-91-75</p>
+        <div class="deliveries">
+          <h4>📦 Отгружено со склада:</h4>
+          <ul>
+            <li>🧪 Минвата 10т → Новосибирск, 08.10.2026</li>
+            <li>🔩 Метизы 6т → Ростов-на-Дону, 19.10.2026</li>
+            <li>🪟 Стеклопакеты 7т → Казань, 30.10.2026</li>
+          </ul>
+        </div>
+      </div>
 
-function renderClients() {
-    document.getElementById('clientsGrid').innerHTML = clients.map(c => `
-        <div class="client-card">
-            <h4>${c.name}</h4>
-            <p class="client-desc">${c.desc}</p>
-            <div class="client-rating">${'⭐'.repeat(c.rating)}</div>
-        </div>`).join('');
-}
+      <div class="card employee-card">
+        <div class="avatar" style="background:#00BCD4;">НБ</div>
+        <h3>Наталья Белова</h3>
+        <p class="role">Бухгалтер</p>
+        <p class="desc">Документооборот и расчёт стоимости.</p>
+        <p class="phone">📞 +7 914 341-91-76</p>
+        <div class="deliveries">
+          <h4>📦 Оформлено перевозок:</h4>
+          <ul>
+            <li>📋 47 накладных за октябрь 2026</li>
+            <li>💰 Общий оборот: 2 340 000 ₽</li>
+            <li>🚛 38 рейсов без задержек</li>
+          </ul>
+        </div>
+      </div>
 
-function renderReviews() {
-    document.getElementById('reviewsList').innerHTML = reviews.map(r => `
-        <div class="review-item">
-            <div class="review-author">${r.author}</div>
-            <div class="review-text">${r.text}</div>
-            <div class="review-date">${r.date}</div>
-        </div>`).join('');
-}
+    </div>
+  </section>
 
-// ===== ВКЛАДКИ =====
-document.querySelectorAll('.nav-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
-        btn.classList.add('active');
-    });
-});
+  <!-- РАЗДЕЛ: КАРТА -->
+  <section class="page" id="map" style="display:none;">
+    <div class="page-header">
+      <h2>Карта маршрутов</h2>
+      <p>География перевозок по России</p>
+    </div>
 
-// ===== МАРШРУТ =====
-function calculateRoute() {
-    const from = document.getElementById('cityFrom').value;
-    const to = document.getElementById('cityTo').value;
-    if (from === to) return alert('Выберите разные города!');
+    <div class="map-wrap">
+      <svg class="map-svg" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+        <rect width="1000" height="500" fill="#0d2137" rx="12"/>
 
-    const key1 = `${from}-${to}`, key2 = `${to}-${from}`;
-    const distance = distances[key1] || distances[key2] || Math.floor(Math.random() * 3000 + 500);
-    const fuel = (distance / 100 * 25).toFixed(1);
-    const cost = Math.round(fuel * 52);
-    const time = (distance / 80).toFixed(1);
+        <!-- Контур России (упрощённый) -->
+        <path d="M100,250 Q130,200 180,190 L240,180 Q300,170 360,175 L420,170 Q490,165 560,170 L640,175 Q720,180 800,195 L870,215 Q900,240 890,270 L870,300 Q830,320 780,330 L720,340 Q650,345 580,340 L510,335 Q440,330 370,335 L300,340 Q230,345 170,335 L120,320 Q100,290 100,250 Z"
+              fill="#1a3a5c" stroke="#2a5a8c" stroke-width="2" opacity="0.7"/>
 
-    document.getElementById('routeDistance').textContent = distance + ' км';
-    document.getElementById('routeFuel').textContent = fuel + ' л';
-    document.getElementById('routeCost').textContent = cost.toLocaleString('ru') + ' ₽';
-    document.getElementById('routeTime').textContent = time + ' ч';
-    document.getElementById('routeResult').style.display = 'block';
+        <!-- Маршруты -->
+        <line x1="320" y1="250" x2="260" y2="190" stroke="#76FF03" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="270" y2="130" stroke="#FF9800" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="450" y2="235" stroke="#00BCD4" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="540" y2="220" stroke="#E91E63" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="340" y2="320" stroke="#9C27B0" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="640" y2="210" stroke="#FFEB3B" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="720" y2="205" stroke="#FF5722" stroke-width="2" stroke-dasharray="8,5"/>
+        <line x1="320" y1="250" x2="850" y2="220" stroke="#4CAF50" stroke-width="2" stroke-dasharray="8,5"/>
 
-    const s = cityCoords[from], e = cityCoords[to];
-    const line = document.getElementById('routeLine');
-    line.setAttribute('x1', s.x); line.setAttribute('y1', s.y);
-    line.setAttribute('x2', e.x); line.setAttribute('y2', e.y);
-    line.style.display = 'block';
-    const sc = document.getElementById('routeStart');
-    sc.setAttribute('cx', s.x); sc.setAttribute('cy', s.y); sc.style.display = 'block';
-    const ec = document.getElementById('routeEnd');
-    ec.setAttribute('cx', e.x); ec.setAttribute('cy', e.y); ec.style.display = 'block';
-}
+        <!-- Москва -->
+        <circle cx="320" cy="250" r="11" fill="#FF5722" stroke="#fff" stroke-width="2"/>
+        <text x="335" y="255" fill="#fff" font-size="13" font-weight="bold">Москва</text>
 
-function clearRoute() {
-    ['routeLine', 'routeStart', 'routeEnd', 'routeResult'].forEach(id =>
-        document.getElementById(id).style.display = 'none');
-}
+        <!-- Санкт-Петербург -->
+        <circle cx="260" cy="190" r="7" fill="#76FF03" stroke="#fff" stroke-width="1.5"/>
+        <text x="170" y="185" fill="#ccc" font-size="11">Санкт-Петербург</text>
 
-// ===== КАЛЬКУЛЯТОР =====
-function toggleCalculator() {
-    document.getElementById('calculatorModal').classList.toggle('active');
-}
+        <!-- Мурманск -->
+        <circle cx="270" cy="130" r="7" fill="#FF9800" stroke="#fff" stroke-width="1.5"/>
+        <text x="195" y="125" fill="#ccc" font-size="11">Мурманск</text>
 
-function calculatePrice() {
-    const weight = parseFloat(document.getElementById('calcWeight').value) || 500;
-    const tariff = parseFloat(document.getElementById('calcTariff').value) || 1;
-    const price = Math.round((15000 + weight * 30) * tariff);
-    document.getElementById('calcPrice').textContent = price.toLocaleString('ru') + ' ₽';
-    const d = new Date();
-    const m = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
-    document.getElementById('calcDate').textContent = d.getDate() + ' ' + m[d.getMonth()];
-}
+        <!-- Казань -->
+        <circle cx="450" cy="235" r="7" fill="#00BCD4" stroke="#fff" stroke-width="1.5"/>
+        <text x="460" y="230" fill="#ccc" font-size="11">Казань</text>
 
-// ===== МОДАЛКИ =====
-function openModal(type) {
-    const c = document.getElementById('modalContent');
-    const empOptions = employees.map(e => `<option>${e.name}</option>`).join('');
-    const templates = {
-        login: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Вход</h3><label>Email:</label><input id="loginEmail">
-            <label>Пароль:</label><input type="password" id="loginPassword">
-            <button class="btn-submit" onclick="doLogin()">Войти</button>`,
-        register: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Регистрация</h3><label>Имя:</label><input id="regName">
-            <label>Email:</label><input id="regEmail">
-            <label>Пароль:</label><input type="password" id="regPassword">
-            <button class="btn-submit" onclick="doRegister()">Зарегистрироваться</button>`,
-        addEmployee: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Добавить сотрудника</h3><label>ФИО:</label><input id="empName">
-            <label>Должность:</label><input id="empPosition">
-            <label>Телефон:</label><input id="empPhone">
-            <button class="btn-submit" onclick="addEmployee()">Добавить</button>`,
-        assignTask: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Назначить задачу</h3><label>Описание:</label><textarea id="taskText"></textarea>
-            <label>Сотрудник:</label><select id="taskEmployee">${empOptions}</select>
-            <label>Приоритет:</label><select id="taskPriority">
-            <option value="urgent">🔴 Срочно</option><option value="progress">🟡 В работе</option>
-            <option value="done">🟢 Выполнено</option></select>
-            <button class="btn-submit" onclick="addTask()">Назначить</button>`,
-        materials: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Распределить материалы</h3><label>Материал:</label>
-            <select id="materialType"><option>Цемент</option><option>Кирпич</option>
-            <option>Доски</option><option>Металлоконструкции</option></select>
-            <label>Количество:</label><input type="number" id="materialAmount">
-            <label>Сотрудник:</label><select id="materialEmployee">${empOptions}</select>
-            <button class="btn-submit" onclick="assignMaterials()">Распределить</button>`,
-        addClient: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>Добавить клиента</h3><label>Название:</label><input id="clientName">
-            <label>Описание:</label><textarea id="clientDesc"></textarea>
-            <label>Рейтинг:</label><select id="clientRating">
-            <option value="5">⭐⭐⭐⭐⭐</option><option value="4">⭐⭐⭐⭐</option>
-            <option value="3">⭐⭐⭐</option></select>
-            <button class="btn-submit" onclick="addClient()">Добавить</button>`,
-        company: `<button class="close-btn" onclick="closeModalDirect()">✕</button>
-            <h3>🏢 О компании</h3>
-            <p style="color:#b0c4de;line-height:1.6;margin-top:15px">Ведущая компания по перевозке сборных грузов и стройматериалов по России с 2015 года.</p>
-            <p style="color:#b0c4de;line-height:1.6;margin-top:15px">📞 +7 914 341-91-71<br>📧 info@sbornye-gruzy.ru<br>📍 Москва, ул. Транспортная, 15</p>
-            <p style="color:#00ffcc;margin-top:20px;font-weight:600">✅ 1000+ клиентов • 50+ городов • Собственный автопарк</p>`
-    };
-    c.innerHTML = templates[type] || '';
-    document.getElementById('modalOverlay').classList.add('active');
-}
+        <!-- Екатеринбург -->
+        <circle cx="540" cy="220" r="7" fill="#E91E63" stroke="#fff" stroke-width="1.5"/>
+        <text x="550" y="215" fill="#ccc" font-size="11">Екатеринбург</text>
 
-function closeModal(e) { if (e.target.id === 'modalOverlay') closeModalDirect(); }
-function closeModalDirect() { document.getElementById('modalOverlay').classList.remove('active'); }
+        <!-- Ростов-на-Дону -->
+        <circle cx="340" cy="320" r="7" fill="#9C27B0" stroke="#fff" stroke-width="1.5"/>
+        <text x="350" y="335" fill="#ccc" font-size="11">Ростов-на-Дону</text>
 
-// ===== ДЕЙСТВИЯ =====
-function doLogin() {
-    const e = document.getElementById('loginEmail').value;
-    if (e) { alert('Добро пожаловать, ' + e + '!'); closeModalDirect(); } else alert('Введите email!');
-}
-function doRegister() {
-    const n = document.getElementById('regName').value;
-    if (n) { alert('Регистрация успешна!'); closeModalDirect(); } else alert('Заполните поля!');
-}
-function addEmployee() {
-    const n = document.getElementById('empName').value, p = document.getElementById('empPosition').value;
-    if (n && p) {
-        employees.push({ id: employees.length + 1, name: n, position: p, status: 'free', phone: document.getElementById('empPhone').value || '—' });
-        renderEmployees(); closeModalDirect(); alert('Сотрудник добавлен!');
-    } else alert('Заполните ФИО и должность!');
-}
-function addTask() {
-    const t = document.getElementById('taskText').value;
-    if (t) {
-        tasks.push({ id: tasks.length + 1, text: t, status: document.getElementById('taskPriority').value, employee: document.getElementById('taskEmployee').value });
-        renderTasks(); closeModalDirect(); alert('Задача назначена!');
-    } else alert('Введите описание!');
-}
-function assignMaterials() {
-    const m = document.getElementById('materialType').value, a = document.getElementById('materialAmount').value;
-    if (a) { alert(`${m} (${a}) → ${document.getElementById('materialEmployee').value}`); closeModalDirect(); }
-    else alert('Укажите количество!');
-}
-function addClient() {
-    const n = document.getElementById('clientName').value;
-    if (n) {
-        clients.push({ id: clients.length + 1, name: n, desc: document.getElementById('clientDesc').value, rating: +document.getElementById('clientRating').value });
-        renderClients(); closeModalDirect(); alert('Клиент добавлен!');
-    } else alert('Введите название!');
-}
+        <!-- Новосибирск -->
+        <circle cx="640" cy="210" r="7" fill="#FFEB3B" stroke="#fff" stroke-width="1.5"/>
+        <text x="650" y="205" fill="#ccc" font-size="11">Новосибирск</text>
 
-// ===== СТАРТ =====
-document.addEventListener('DOMContentLoaded', () => {
-    fillCitySelects();
-    renderMapCities();
-    renderEmployees();
-    renderTasks();
-    renderClients();
-    renderReviews();
-    console.log('✅ Сайт «Сборные Грузы» запущен');
-});
+        <!-- Красноярск -->
+        <circle cx="720" cy="205" r="7" fill="#FF5722" stroke="#fff" stroke-width="1.5"/>
+        <text x="730" y="200" fill="#ccc" font-size="11">Красноярск</text>
+
+        <!-- Владивосток -->
+        <circle cx="850" cy="220" r="7" fill="#4CAF50" stroke="#fff" stroke-width="1.5"/>
+        <text x="860" y="215" fill="#ccc" font-size="11">Владивосток</text>
+
+        <!-- Легенда -->
+        <circle cx="50" cy="450" r="6" fill="#FF5722"/>
+        <text x="65" y="455" fill="#ccc" font-size="11">Москва — центр</text>
+        <line x1="50" y1="475" x2="80" y2="475" stroke="#76FF03" stroke-width="2" stroke-dasharray="6,4"/>
+        <text x="90" y="480" fill="#ccc" font-size="11">Маршруты</text>
+      </svg>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-icon">📏</div><div class="stat-lbl">Маршрутов</div><div class="stat-val">8</div></div>
+      <div class="stat"><div class="stat-icon">🚛</div><div class="stat-lbl">Рейсов/мес</div><div class="stat-val">38+</div></div>
+      <div class="stat"><div class="stat-icon">📦</div><div class="stat-lbl">Доставлено</div><div class="stat-val">420 т</div></div>
+      <div class="stat"><div class="stat-icon">🗺️</div><div class="stat-lbl">География</div><div class="stat-val">Вся РФ</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <h3>📋 Активные маршруты</h3>
+      <table class="routes-table">
+        <thead>
+          <tr><th>Откуда</th><th>Куда</th><th>Расстояние</th><th>Топливо</th><th>Цена</th><th>Время</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Москва</td><td>Санкт-Петербург</td><td>710 км</td><td>213 л</td><td>18 500 ₽</td><td>~10 ч</td></tr>
+          <tr><td>Москва</td><td>Мурманск</td><td>2 067 км</td><td>620 л</td><td>36 719 ₽</td><td>~28 ч</td></tr>
+          <tr><td>Москва</td><td>Казань</td><td>820 км</td><td>246 л</td><td>21 300 ₽</td><td>~12 ч</td></tr>
+          <tr><td>Москва</td><td>Екатеринбург</td><td>1 790 км</td><td>537 л</td><td>32 400 ₽</td><td>~24 ч</td></tr>
+          <tr><td>Москва</td><td>Ростов-на-Дону</td><td>1 070 км</td><td>321 л</td><td>24 800 ₽</td><td>~15 ч</td></tr>
+          <tr><td>Москва</td><td>Новосибирск</td><td>3 360 км</td><td>1 008 л</td><td>58 200 ₽</td><td>~45 ч</td></tr>
+          <tr><td>Москва</td><td>Красноярск</td><td>4 130 км</td><td>1 239 л</td><td>71 500 ₽</td><td>~55 ч</td></tr>
+          <tr><td>Москва</td><td>Владивосток</td><td>9 200 км</td><td>2 760 л</td><td>142 000 ₽</td><td>~120 ч</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- РАЗДЕЛ: КЛИЕНТЫ -->
+  <section class="page" id="clients" style="display:none;">
+    <div class="page-header">
+      <h2>Клиенты и отзывы</h2>
+      <p>Кто заказывал доставку стройматериалов</p>
+    </div>
+    <div class="grid clients-grid">
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#4CAF50;">СК</div>
+          <div><h3>ООО «СтройКомплект»</h3><p class="city">📍 Санкт-Петербург</p></div>
+        </div>
+        <div class="rating">★★★★★</div>
+        <p class="review">«Кирпич и цемент прибыли точно в срок, без повреждений. Отличная компания!»</p>
+        <p class="date">15 октября 2026</p>
+      </div>
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#2196F3;">МД</div>
+          <div><h3>ИП Морозов Д.А.</h3><p class="city">📍 Мурманск</p></div>
+        </div>
+        <div class="rating">★★★★★</div>
+        <p class="review">«Везли утеплитель и пиломатериалы на север. Всё доехало в идеальном состоянии.»</p>
+        <p class="date">2 декабря 2026</p>
+      </div>
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#FF9800;">ТМ</div>
+          <div><h3>ООО «ТеплоМонтаж»</h3><p class="city">📍 Казань</p></div>
+        </div>
+        <div class="rating">★★★★☆</div>
+        <p class="review">«Хороший сервис, адекватные цены. Документы оформили чуть долго, но всё супер.»</p>
+        <p class="date">28 сентября 2026</p>
+      </div>
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#9C27B0;">ДС</div>
+          <div><h3>АО «ДонСтрой»</h3><p class="city">📍 Ростов-на-Дону</p></div>
+        </div>
+        <div class="rating">★★★★★</div>
+        <p class="review">«Работаем третий год. Надёжный партнёр, менеджеры всегда на связи.»</p>
+        <p class="date">10 ноября 2026</p>
+      </div>
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#E91E63;">УС</div>
+          <div><h3>ООО «УралСнаб»</h3><p class="city">📍 Екатеринбург</p></div>
+        </div>
+        <div class="rating">★★★★★</div>
+        <p class="review">«Металлоконструкции — всё чётко. Водитель помог с разгрузкой. Спасибо!»</p>
+        <p class="date">5 ноября 2026</p>
+      </div>
+
+      <div class="card client-card">
+        <div class="client-head">
+          <div class="avatar small" style="background:#00BCD4;">СБ</div>
+          <div><h3>ИП Соколова В.И.</h3><p class="city">📍 Новосибирск</p></div>
+        </div>
+        <div class="rating">★★★★☆</div>
+        <p class="review">«Доставка чуть дольше обещанного, но груз целый. Цена ниже конкурентов.»</p>
+        <p class="date">20 октября 2026</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- МОДАЛКА: О КОМПАНИИ -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <button class="modal-x" id="closeModal">✕</button>
+      <h2>О компании «Сборные грузы»</h2>
+
+      <div class="info-block">
+        <h3>📌 О нас</h3>
+        <p>Транспортная компания, перевозка сборных грузов и стройматериалов по России. Работаем с 2010 года. Автопарк 25 машин, страхование грузов, доставка в 8 крупных городов.</p>
+      </div>
+
+      <div class="info-block">
+        <h3>🏢 Реквизиты</h3>
+        <p><b>Адрес:</b> г. Москва, ул. Складская, 15/2</p>
+        <p><b>Телефон:</b> +7 914 341-91-71</p>
+        <p><b>Email:</b> info@sbornye-gruzy.ru</p>
+        <p><b>Режим:</b> Пн–Вс, 08:00–22:00</p>
+      </div>
+
+      <div class="info-block">
+        <h3>⭐ Отзывы о компании</h3>
+        <div class="c-review"><b>Андрей К.</b> <span class="stars">★★★★★</span><p>«Оборудование в Красноярск — всё вовремя.»</p></div>
+        <div class="c-review"><b>Ирина М.</b> <span class="stars">★★★★★</span><p>«2 года без задержек, менеджеры вежливые.»</p></div>
+        <div class="c-review"><b>Сергей В.</b> <span class="stars">★★★★☆</span><p>«Хороший сервис, в час пик сложно дозвониться.»</p></div>
+        <div class="c-review"><b>Ольга П.</b> <span class="stars">★★★★★</span><p>«Во Владивосток — дешевле конкурентов, 5 дней.»</p></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
